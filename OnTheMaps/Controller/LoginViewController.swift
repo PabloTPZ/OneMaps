@@ -61,7 +61,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.performSegue(withIdentifier: "login", sender: nil)
             }
         } else {
-            showAlert(message: "Please enter valid credentials.", title: "Login Error")
+            DispatchQueue.main.async {
+                self.showAlert(message: "Please enter valid credentials.", title: "Login Error")
+            }
         }
     }
     

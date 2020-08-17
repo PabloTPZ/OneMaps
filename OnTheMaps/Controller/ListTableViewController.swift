@@ -56,10 +56,17 @@ class ListTableViewController: UITableViewController {
     func getStudentsList() {
         showActivityIndicator()
         UdacityClient.getStudentLocations() {students, error in
-            self.students = students ?? []
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                self.hideActivityIndicator()
+            if error == nil {
+                self.students = students ?? []
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                    self.hideActivityIndicator()
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.hideActivityIndicator()
+                    self.showAlert(message: "Could not load locations try later", title: "Error")
+                }
             }
         }
     }
