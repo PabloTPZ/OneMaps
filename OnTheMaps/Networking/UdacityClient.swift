@@ -102,7 +102,7 @@ class UdacityClient: NSObject {
     
     // MARK: Log Out
     
-    class func logout(completion: @escaping () -> Void) {
+    class func logout(completion: @escaping (Error?) -> Void) {
         var request = URLRequest(url: Endpoints.udacityLogin.url)
         request.httpMethod = "DELETE"
         var xsrfCookie: HTTPCookie? = nil
@@ -115,14 +115,14 @@ class UdacityClient: NSObject {
         }
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil {
-                print("Error logging out.")
+                completion(error)
                 return
             }
             let range = 5..<data!.count
             let newData = data?.subdata(in: range)
             print(String(data: newData!, encoding: .utf8)!)
             Auth.sessionId = ""
-            completion()
+            completion(error)
         }
         task.resume()
     }

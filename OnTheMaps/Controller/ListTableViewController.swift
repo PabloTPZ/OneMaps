@@ -37,7 +37,7 @@ class ListTableViewController: UITableViewController {
     
     @IBAction func logout(_ sender: UIBarButtonItem) {
         showActivityIndicator()
-        UdacityClient.logout {
+        UdacityClient.logout { error in
             DispatchQueue.main.async {
                 self.dismiss(animated: true, completion: nil)
                 self.hideActivityIndicator()

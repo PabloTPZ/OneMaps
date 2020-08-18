@@ -34,10 +34,20 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBAction func logout(_ sender: UIBarButtonItem) {
         self.activityIndicator.startAnimating()
-        UdacityClient.logout {
-            DispatchQueue.main.async {
-                self.dismiss(animated: true, completion: nil)
-                self.activityIndicator.stopAnimating()
+        UdacityClient.logout { error in
+            if error == nil {
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil)
+                    self.activityIndicator.stopAnimating()
+                    return
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                           let alertVC = UIAlertController(title: "Error", message: "Error logging out.", preferredStyle: .alert)
+                           alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                           self.present(alertVC, animated: false)
+                }
             }
         }
     }
@@ -77,6 +87,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 
             } else {
                 DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
                     self.showAlert(message: "Could not load locations try later", title: "Error")
                 }
             }
